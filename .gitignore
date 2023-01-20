@@ -7,6 +7,10 @@
 *.obj
 *.elf
 
+# Intermediate Files
+*.i
+*.s
+
 # Linker output
 *.ilk
 *.map
@@ -35,6 +39,11 @@
 *.i*86
 *.x86_64
 *.hex
+*.gba
+*.elf
+
+# Save Files
+*.sav
 
 # Debug files
 *.dSYM/
