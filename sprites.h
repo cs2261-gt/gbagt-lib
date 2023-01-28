@@ -41,7 +41,7 @@ extern AFFINE_MATRIX* affine;
 #define TILEMASK 0x3FF
 
 // Attribute 0
-#define ATTR0_SPRITEX(X)     ((X) & XPOSMASK) // Row
+#define ATTR0_SPRITEX(x)   ((x) & XPOSMASK) // Row
 #define ATTR0_OM(mode)     (((mode) & 3) << 8) // Object Mode
 enum MODE { REGULAR, AFFINE, HIDE, DOUBLEAFFINE }; // Object Mode Options
 #define ATTR0_ALPHA        (1 << 10) // Enable Alpha Blending
@@ -53,17 +53,18 @@ enum MODE { REGULAR, AFFINE, HIDE, DOUBLEAFFINE }; // Object Mode Options
 enum SHAPE { SQUARE, WIDE, TALL }; // Shape Options (See Sprite Dimension Chart)
                                                 
 // Attribute 1
-#define ATTR1_SPRITEY(Y)     ((Y) & YPOSMASK) // Column
-#define ATTR1_HFLIP        (1 << 12) // Horizontal Flip
-#define ATTR1_VFLIP        (1 << 13) // Vertical Flip
+#define ATTR1_SPRITEY(y)      ((y) & YPOSMASK) // Column
+#define ATTR1_HFLIP           (1 << 12) // Horizontal Flip
+#define ATTR1_VFLIP           (1 << 13) // Vertical Flip
 #define ATTR1_AFFINE(matrix)  (((matrix) & 31) << 9)
-#define ATTR1_SIZE(size)   (((size) & 3) << 14) // Size
+#define ATTR1_SIZE(size)      (((size) & 3) << 14) // Size
 enum SIZE { TINY, SMALL, MEDIUM, LARGE }; // Size Options (See Sprite Dimension Chart)
 
 // Attribute 2
-#define ATTR2_TILEID(col, row)  OFFSET(((col) & 31), ((row) & 31), 32)
-#define ATTR2_PRIORITY(num)     (((num) & 3) << 10)
-#define ATTR2_PALROW(row)       (((row) & 15) << 12)
+#define ATTR2_TILEID(x, y)  OFFSET(((x) & 31), ((y) & 31), 32)
+#define ATTR2_TILEID(t)     ((t) & 0x3FF)
+#define ATTR2_PRIORITY(num) (((num) & 3) << 10)
+#define ATTR2_PALROW(row)   (((row) & 15) << 12)
 
 // Sprite Dimension Chart
 //        -------------------------------------
@@ -81,10 +82,6 @@ void hide(ANISPRITE* sprite);
 void hideSprites();
 void setAffineMatrix(int matrix, u16 a, u16 b, u16 c, u16 d);
 void updateOAM();
-
-#define SPRITE_Y(y)    ((y) & 0xFF)
-#define SPRITE_X(x)    ((x) & 0x1FF)
-#define SPRITE_TILE(t) ((t) & 0x3FF)
 
 // Generic struct for animated sprite
 typedef struct {
