@@ -23,7 +23,6 @@ enum MODE { REGULAR, AFFINE, HIDE, DOUBLEAFFINE }; // Object Mode Options
 #define ATTR0_ALPHA        (1 << 10) // Enable Alpha Blending
 #define ATTR0_WINDOW       (1 << 11) // Enable Object Window Mode
 #define ATTR0_MOSAIC       (1 << 12) // Enable Mosaic Effect
-#define ATTR0_4BPP         (0 << 13) // 4 Bits Per Pixel
 #define ATTR0_8BPP         (1 << 13) // 8 Bits Per Pixel
 #define ATTR0_SHAPE(shape) (((shape) & 3) << 14) // Shape
 enum SHAPE { SQUARE, WIDE, TALL }; // Shape Options (See Sprite Dimension Chart)
