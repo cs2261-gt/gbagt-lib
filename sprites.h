@@ -62,7 +62,7 @@ enum SIZE { TINY, SMALL, MEDIUM, LARGE }; // Size Options (See Sprite Dimension 
 
 // Attribute 2
 #define ATTR2_TILEID(x, y)  OFFSET(((x) & 31), ((y) & 31), 32)
-#define ATTR2_TILEID(t)     ((t) & 0x3FF)
+#define ATTR2_TILEID(t)     ((t) & TILEMASK)
 #define ATTR2_PRIORITY(num) (((num) & 3) << 10)
 #define ATTR2_PALROW(row)   (((row) & 15) << 12)
 
