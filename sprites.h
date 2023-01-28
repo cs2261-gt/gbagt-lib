@@ -37,10 +37,10 @@ enum SHAPE { SQUARE, WIDE, TALL }; // Shape Options (See Sprite Dimension Chart)
 enum SIZE { TINY, SMALL, MEDIUM, LARGE }; // Size Options (See Sprite Dimension Chart)
 
 // Attribute 2
-#define ATTR2_TILEID(x, y)  OFFSET(((x) & 31), ((y) & 31), 32)
-#define ATTR2_TILEID(t)     ((t) & TILEMASK)
-#define ATTR2_PRIORITY(num) (((num) & 3) << 10)
-#define ATTR2_PALROW(row)   (((row) & 15) << 12)
+#define ATTR2_TILEID(t)     ((t) & TILEMASK) // Tile ID (1D Memory Position)
+#define ATTR2_TILEID(x, y)  OFFSET(((x) & 31), ((y) & 31), 32) // Tile ID (2D Grid Position)
+#define ATTR2_PRIORITY(num) (((num) & 3) << 10) // Priority
+#define ATTR2_PALROW(row)   (((row) & 15) << 12) // Palette Row
 
 // Sprite Dimension Chart (In Tiles)
 //        -------------------------------------
