@@ -66,7 +66,7 @@ enum SIZE { TINY, SMALL, MEDIUM, LARGE }; // Size Options (See Sprite Dimension 
 #define ATTR2_PRIORITY(num) (((num) & 3) << 10)
 #define ATTR2_PALROW(row)   (((row) & 15) << 12)
 
-// Sprite Dimension Chart
+// Sprite Dimension Chart (In Tiles)
 //        -------------------------------------
 //        |  TINY  | SMALL  | MEDIUM | LARGE  |
 // --------------------------------------------
