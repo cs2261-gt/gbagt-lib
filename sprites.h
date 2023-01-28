@@ -4,92 +4,83 @@
 #include "gba.h"
 
 // Sprite Palette
-#define SPRITE_PAL ((u16 *)0x5000200)
+#define SPRITE_PALETTE ((u16*) 0x5000200)
 
 // Object Attribute Struct
 typedef struct {
-  u16 attr0;
-  u16 attr1;
-  u16 attr2;
-  u16 fill;
+
+    u16 attr0;
+    u16 attr1;
+    u16 attr2;
+    u16 fill;
+    
 } OBJ_ATTR;
 
+// Affine Matrix Struct
+typedef struct {
+
+    u16 fill0[3];
+    u16 a;
+    u16 fill1[3];
+    u16 b;
+    u16 fill2[3];
+    u16 c;
+    u16 fill3[3];
+    u16 d;
+    
+} AFFINE_MATRIX;
+
 // Object Attribute Memory
-#define OAM ((OBJ_ATTR*)(0x7000000))
-extern OBJ_ATTR shadowOAM[128];
+#define OAM ((OBJ_ATTR*) 0x7000000)
+extern OBJ_ATTR shadowOAM[];
+extern AFFINE_MATRIX* affine;
 
-struct attr0 {
-  u16 regular;       // Normal Rendering (default)
-  u16 affine;        // Affine Rendering
-  u16 hide;          // Hidden
-  u16 double_affine; // Double Affine Rendering
-  u16 enable_alpha;  // Enable Alpha Blending
-  u16 enable_window; // Object Window Mode (see GBATek)
-  u16 enable_mosaic; // Enable Mosaic Effect
-  u16 fourBpp;       // 4 Bits Per Pixel (default)
-  u16 eightBpp;      // 8 Bits Per Pixel
-  u16 square;        // Square Shape (default)
-  u16 wide;          // Wide Shape
-  u16 tall;          // Tall Shape
-};
+// Sprite Constants
+#define XPOSMASK 0xFF
+#define YPOSMASK 0x1FF
+#define TILEMASK 0x3FF
 
-struct attr1 {
-  u16 hflip;  // Flip horizontally
-  u16 vflip;  // Flip Vertically
-  u16 tiny;   // See Size Chart
-  u16 small;  // See Size Chart
-  u16 medium; // See Size Chart
-  u16 large;  // See Size Chart
-};
-
-struct oam_attrs {
-  struct attr0 attr0;
-  struct attr1 attr1;
-};
-
-static struct oam_attrs oam = {
-  .attr0 = {
-    .regular = (0 << 8),
-    .affine = (1 << 8),
-    .hide = (2 << 8),
-    .double_affine = (3 << 8),
-    .enable_alpha = (1 << 10),
-    .enable_window = (1 << 11),
-    .enable_mosaic = (1 << 12),
-    .fourBpp = (0 << 13),
-    .eightBpp = (1 << 13),
-    .square = (0 << 14),
-    .wide = (1 << 14),
-    .tall = (1 << 15),
-  },
-  .attr1 = {
-    .hflip = (1 << 12),
-    .vflip = (1 << 13),
-    .tiny = (0 << 14),
-    .small = (1 << 14),
-    .medium = (2 << 14),
-    .large = (3 << 14)
-  }
-};
-
-// ----------- Sprite Size Chart --------------
-// --------------------------------------------
-//        |  TINY  | SMALL | MEDIUM | LARGE  |
-// --------------------------------------------
-// SQUARE |  8x8   | 16x16 | 32x32  | 64x64  |
-// --------------------------------------------
-//  WIDE  |  16x8  | 32x8  | 32x16  | 64x32  |
-// --------------------------------------------
-//  TALL  |  8x16  | 8x32  | 16x32  | 32x64  |
-// --------------------------------------------
+// Attribute 0
+#define ATTR0_SPRITEX(X)     ((X) & XPOSMASK) // Row
+#define ATTR0_OM(mode)     (((mode) & 3) << 8) // Object Mode
+enum MODE { REGULAR, AFFINE, HIDE, DOUBLEAFFINE }; // Object Mode Options
+#define ATTR0_ALPHA        (1 << 10) // Enable Alpha Blending
+#define ATTR0_WINDOW       (1 << 11) // Enable Object Window Mode
+#define ATTR0_MOSAIC       (1 << 12) // Enable Mosaic Effect
+#define ATTR0_4BPP         (0 << 13) // 4 Bits Per Pixel
+#define ATTR0_8BPP         (1 << 13) // 8 Bits Per Pixel
+#define ATTR0_SHAPE(shape) (((shape) & 3) << 14) // Shape
+enum SHAPE { SQUARE, WIDE, TALL }; // Shape Options (See Sprite Dimension Chart)
+                                                
+// Attribute 1
+#define ATTR1_SPRITEY(Y)     ((Y) & YPOSMASK) // Column
+#define ATTR1_HFLIP        (1 << 12) // Horizontal Flip
+#define ATTR1_VFLIP        (1 << 13) // Vertical Flip
+#define ATTR1_AFFINE(matrix)  (((matrix) & 31) << 9)
+#define ATTR1_SIZE(size)   (((size) & 3) << 14) // Size
+enum SIZE { TINY, SMALL, MEDIUM, LARGE }; // Size Options (See Sprite Dimension Chart)
 
 // Attribute 2
-#define ATTR2_TILEID(col, row) (((row)*32+(col)) & 0x3FF)
-#define ATTR2_PRIORITY(num)    (((num) & 3) << 10)
-#define ATTR2_PALROW(row)      (((row) & 0xF) <<12)
+#define ATTR2_TILEID(col, row)  OFFSET(((col) & 31), ((row) & 31), 32)
+#define ATTR2_PRIORITY(num)     (((num) & 3) << 10)
+#define ATTR2_PALROW(row)       (((row) & 15) << 12)
+
+// Sprite Dimension Chart
+//        -------------------------------------
+//        |  TINY  | SMALL  | MEDIUM | LARGE  |
+// --------------------------------------------
+// SQUARE |  8x8   | 16x16  | 32x32  | 64x64  |
+// --------------------------------------------
+//  WIDE  |  16x8  | 32x8   | 32x16  | 64x32  |
+// --------------------------------------------
+//  TALL  |  8x16  | 8x32   | 16x32  | 32x64  |
+// --------------------------------------------
 
 // Sprite Functions
+void hide(ANISPRITE* sprite);
 void hideSprites();
+void setAffineMatrix(int matrix, u16 a, u16 b, u16 c, u16 d);
+void updateOAM();
 
 #define SPRITE_Y(y)    ((y) & 0xFF)
 #define SPRITE_X(x)    ((x) & 0x1FF)
@@ -97,18 +88,22 @@ void hideSprites();
 
 // Generic struct for animated sprite
 typedef struct {
-    int worldRow;
-    int worldCol;
-    int rdel;
-    int cdel;
+
     int width;
     int height;
-    int aniCounter;
-    int aniState;
+    int worldX;
+    int dx;
+    int worldY;
+    int dy;
     int prevAniState;
-    int curFrame;
+    int aniState;
+    int currFrame;
+    int aniCounter;
     int numFrames;
+    OBJ_ATTR* attributes;
     int hide;
+    int affineMatrix;
+
 } ANISPRITE;
 
 #endif
