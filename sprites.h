@@ -21,10 +21,13 @@ typedef struct {
 
     u16 fill0[3];
     u16 a;
+
     u16 fill1[3];
     u16 b;
+
     u16 fill2[3];
     u16 c;
+    
     u16 fill3[3];
     u16 d;
     
@@ -88,15 +91,18 @@ typedef struct {
 
     int width;
     int height;
+
     int worldX;
     int dx;
     int worldY;
     int dy;
+    
     int prevAniState;
     int aniState;
     int currFrame;
     int aniCounter;
     int numFrames;
+    
     OBJ_ATTR* attributes;
     int hide;
     int affineMatrix;
