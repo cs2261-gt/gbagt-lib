@@ -6,33 +6,6 @@
 // Sprite Palette
 #define SPRITE_PALETTE ((u16*) 0x5000200)
 
-// Object Attribute Struct
-typedef struct {
-
-    u16 attr0;
-    u16 attr1;
-    u16 attr2;
-    u16 fill;
-    
-} OBJ_ATTR;
-
-// Affine Matrix Struct
-typedef struct {
-
-    u16 fill0[3];
-    u16 a;
-
-    u16 fill1[3];
-    u16 b;
-
-    u16 fill2[3];
-    u16 c;
-    
-    u16 fill3[3];
-    u16 d;
-    
-} AFFINE_MATRIX;
-
 // Object Attribute Memory
 #define OAM ((OBJ_ATTR*) 0x7000000)
 extern OBJ_ATTR shadowOAM[];
@@ -80,11 +53,32 @@ enum SIZE { TINY, SMALL, MEDIUM, LARGE }; // Size Options (See Sprite Dimension 
 //  TALL  |  8x16  | 8x32   | 16x32  | 32x64  |
 // --------------------------------------------
 
-// Sprite Functions
-void hide(ANISPRITE* sprite);
-void hideSprites();
-void setAffineMatrix(int matrix, u16 a, u16 b, u16 c, u16 d);
-void updateOAM();
+// Object Attribute Struct
+typedef struct {
+
+    u16 attr0;
+    u16 attr1;
+    u16 attr2;
+    u16 fill;
+    
+} OBJ_ATTR;
+
+// Affine Matrix Struct
+typedef struct {
+
+    u16 fill0[3];
+    u16 a;
+
+    u16 fill1[3];
+    u16 b;
+
+    u16 fill2[3];
+    u16 c;
+
+    u16 fill3[3];
+    u16 d;
+    
+} AFFINE_MATRIX;
 
 // Generic struct for animated sprite
 typedef struct {
@@ -108,5 +102,11 @@ typedef struct {
     int affineMatrix;
 
 } ANISPRITE;
+
+// Sprite Functions
+void hide(ANISPRITE* sprite);
+void hideSprites();
+void setAffineMatrix(int matrix, u16 a, u16 b, u16 c, u16 d);
+void updateOAM();
 
 #endif
