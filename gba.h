@@ -39,7 +39,7 @@ typedef unsigned long long u64;
 extern volatile unsigned short *videoBuffer;
 
 // ---- Color ----
-#define PALETTE       ((unsigned short *)0x5000000)
+#define BG_PALETTE       ((unsigned short *)0x5000000)
 #define COLOR(r, g, b) (((r) & 31) | ((g) & 31) << 5 | ((b) & 31) << 10)
 
 // Miscellaneous Functions
