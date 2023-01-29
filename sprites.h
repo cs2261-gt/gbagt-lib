@@ -47,6 +47,24 @@ struct oam_attrs {
   struct attr1 attr1;
 };
 
+// OAM Attributes
+// Attribute 0:
+//    Bits 0-7: Y coordinate
+//    Bits 8-9: Object mode
+//    Bits A-B: GFX mode
+//    Bit C:    Mosaic mode
+//    Bit D:    Color mode (bpp)
+//    Bits E-F: Sprite shape
+// Attribute 1:
+//    Bits 0-8: X coordinate
+//    Bits 9-D: Affine entry (ONLY IF affine is turned on in attr0 bit 8)
+//    Bit C:    Horizontal flip
+//    Bit D:    Vertical flip
+//    Bits E-F: Sprite size
+// Attribute 2:
+//    Bits 0-9: Tile ID
+//    Bits A-B: Priority
+//    Bits C-F: Palette row
 static struct oam_attrs oam = {
   .attr0 = {
     .regular = (0 << 8),
@@ -74,7 +92,6 @@ static struct oam_attrs oam = {
 
 // ----------- Sprite Size Chart --------------
 // --------------------------------------------
-//        |  TINY  | SMALL | MEDIUM | LARGE  |
 // --------------------------------------------
 // SQUARE |  8x8   | 16x16 | 32x32  | 64x64  |
 // --------------------------------------------
@@ -83,10 +100,12 @@ static struct oam_attrs oam = {
 //  TALL  |  8x16  | 8x32  | 16x32  | 32x64  |
 // --------------------------------------------
 
+
+
 // Attribute 2
-#define ATTR2_TILEID(col, row) (((row)*32+(col)) & 0x3FF)
+#define ATTR2_TILEID(x, y) (((y)*32+(x)) & 0x3FF)
 #define ATTR2_PRIORITY(num)    (((num) & 3) << 10)
-#define ATTR2_PALROW(row)      (((row) & 0xF) <<12)
+#define ATTR2_PALROW(y)      (((y) & 0xF) <<12)
 
 // Sprite Functions
 void hideSprites();
@@ -97,16 +116,16 @@ void hideSprites();
 
 // Generic struct for animated sprite
 typedef struct {
-    int worldRow;
-    int worldCol;
-    int rdel;
-    int cdel;
+    int worldX;
+    int worldY;
+    int xVelocity;
+    int yVelocity;
     int width;
     int height;
-    int aniCounter;
-    int aniState;
-    int prevAniState;
-    int curFrame;
+    int framesPassed;
+    int direction; // direction struct has up down left right
+    int aniState; // in lab09, anistate struct only has walking
+    int aniFrame;
     int numFrames;
     int hide;
 } ANISPRITE;

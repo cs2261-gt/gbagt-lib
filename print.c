@@ -1,5 +1,3 @@
-// IGNORE THIS FILE! we give you print.c and print.h for debugging purposes :)
-
 /*
  mgba.h
  Copyright (c) 2016 Jeffrey Pfau
@@ -19,8 +17,7 @@
  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
- FALL 2022
+ SPRING 2023
 */
 
 #include <stdarg.h>
@@ -32,6 +29,11 @@
 #define REG_DEBUG_FLAGS (volatile uint16_t*) 0x4FFF700
 #define REG_DEBUG_STRING (char*) 0x4FFF600
 
+// Initialize debugging -- place in your initialize fuction
+uint8_t mgba_open(void) {
+	*REG_DEBUG_ENABLE = 0xC0DE;
+	return *REG_DEBUG_ENABLE == 0x1DEA;
+}
 
 // Prints a string to mGBA's log with specified LEVEL ( Tools > View Logs )
 // Levels are found in print.h
@@ -67,12 +69,6 @@ void mgba_printf(const char* ptr, ...) {
 // Pops up with a breakpoint window when reached
 void mgba_break(void) {
 	mgba_printf_level(0, "Breakpoint Reached");
-}
-
-// Initialize debugging -- place in your initialize fuction
-uint8_t mgba_open(void) {
-	*REG_DEBUG_ENABLE = 0xC0DE;
-	return *REG_DEBUG_ENABLE == 0x1DEA;
 }
 
 // Deinitialize debugging

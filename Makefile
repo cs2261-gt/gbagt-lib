@@ -81,6 +81,6 @@ $(AUDIOHEADERS) : %.h : %.c
 clean:
 	$(RM) $(ROM_NAME) $(ELF_NAME) $(BIN_NAME)
 	$(RM) $(AUDIOOBJECTS) $(AUDIOHEADERS)
-	$(RM) *.o *.i *.s
+	$(RM) *.o *.i *.s *.sav
 
 audio: $(AUDIOOBJECTS)

@@ -1,24 +1,24 @@
 #include "gba.h"
 
-// The start of the video memory
+// Pointer to the start of video memory
 unsigned volatile short *videoBuffer = (unsigned short *)0x6000000;
 
 
-// ---- Miscellaneous Functions ----
-int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, int widthB, int heightB) {
-    return rowA <= rowB + heightB - 1 && rowA + heightA - 1 >= rowB && colA <= colB + widthB - 1 && colA + widthA - 1 >= colB;
+// Checks for collision between two rectangles
+int collision(int x1, int y1, int width1, int height1, int x2, int y2, int width2, int height2) {
+    return y1 < y2 + height2 && y1 + height1 > y2 && x1 < x2 + width2 && x1 + width1 > x2;
 }
 
+// Waits until drawing pixel 0 of line 160
 void waitForVBlank() {
-    while (SCANLINECOUNTER >= 160);
-    while (SCANLINECOUNTER < 160);
+    while (REG_VCOUNT >= 160);
+    while (REG_VCOUNT < 160);
 }
 
-
-// ---- DMA ----
-// The start of DMA registers
+// Pointer to the start of DMA registers
 DMA *dma = (DMA *)0x40000B0;
 
+// Immediately begins a DMA transfer using parameters
 void DMANow(int channel, volatile const void *src, volatile void *dst, unsigned int cnt) {
     dma[channel].cnt = 0;
     dma[channel].src = src;
