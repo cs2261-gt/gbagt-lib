@@ -21,7 +21,7 @@ void initSound(){
   REG_SOUNDCNT_H = DMG_MASTER_VOL(2);
 }
 
-void playNoteWithDuration(NoteWithDuration *n, u8 duty){
+void playNoteWithDuration(NoteWithDuration *n, unsigned char duty){
   if (n->note != REST) {
     REG_SND2CNT = DMG_ENV_VOL(15) | DMG_DUTY(duty) | (64 - n->duration*256/1000);  // duration is in ms, so back-calculate
     REG_SND2FREQ = n->note | SND_RESET | DMG_FREQ_TIMED;
@@ -31,18 +31,18 @@ void playNoteWithDuration(NoteWithDuration *n, u8 duty){
   }
 }
 
-void playChannel1(u16 note, u8 length, u8 sweepShift, u8 sweepTime, u8 sweepDir, u8 envStepTime, u8 envDir, u8 duty){
+void playChannel1(unsigned short note, unsigned char length, unsigned char sweepShift, unsigned char sweepTime, unsigned char sweepDir, unsigned char envStepTime, unsigned char envDir, unsigned char duty){
   REG_SND1CNT = DMG_ENV_VOL(15) | (envDir && DMG_DIRECTION_INCR) | DMG_STEP_TIME(envStepTime) | DMG_DUTY(duty) | DMG_SND_LENGTH(length);
   REG_SND1FREQ = note | SND_RESET | DMG_FREQ_TIMED;
   REG_SND1SWEEP = DMG_SWEEP_NUM(sweepShift) | DMG_SWEEP_STEPTIME(sweepTime) | (sweepDir && DMG_SWEEP_DOWN);
 }
 
-void playDrumSound(u8 r, u8 s, u8 b, u8 length, u8 steptime){
+void playDrumSound(unsigned char r, unsigned char s, unsigned char b, unsigned char length, unsigned char steptime){
   REG_SND4CNT = DMG_ENV_VOL(15) | DMG_STEP_TIME(steptime) | DMG_SND_LENGTH(length);
   REG_SND4FREQ = SND_RESET | DMG_FREQ_TIMED | DMG_SND4_S(s) | DMG_SND4_BIT(b) | DMG_SND4_R(r);
 }
 
-void playAnalogSound(u16 sound){
+void playAnalogSound(unsigned short sound){
   switch (sound){
     case 0:
       playDrumSound(0, 0, 0, 20, 1);  // "Hiss"
