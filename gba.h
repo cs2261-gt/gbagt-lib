@@ -47,6 +47,9 @@ extern volatile unsigned short *videoBuffer;
 // Checks for collision between two rectangles
 int collision(int x1, int y1, int width1, int height1, int x2, int y2, int width2, int height2);
 
+// Waits until vBlank has just started
+void waitForVBlank();
+
 // Buttons
 #define REG_BUTTONS (*(volatile unsigned short *)0x04000130) // Buttons down register
 #define BUTTON_A         (1<<0) // Mask for button A (REG_BUTTONS or REG_KEYCNT)
