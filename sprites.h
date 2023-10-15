@@ -102,10 +102,9 @@ typedef struct {
     int height;
     int framesPassed;
     int direction;
-    int aniState;
-    int aniFrame;
-    int numFrames;
-    int hide;
+    int isAnimating;
+    int currAniFrame;
+    int numAniFrames;
     u8 oamIndex; 
 } ANISPRITE;
 
