@@ -94,18 +94,18 @@ void hideSprites();
 
 // Generic struct for animated sprite
 typedef struct {
-    int worldX;
-    int worldY;
-    int xVelocity;
-    int yVelocity;
+    int x;
+    int y;
+    int xVel;
+    int yVel;
     int width;
     int height;
-    int framesPassed;
+    int timeUntilNextFrame;
     int direction;
     int isAnimating;
-    int currAniFrame;
-    int numAniFrames;
+    int currentFrame;
+    int numFrames;
     u8 oamIndex; 
-} ANISPRITE;
+} SPRITE;
 
 #endif
