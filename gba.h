@@ -17,7 +17,7 @@ typedef void (*ihp)(void); // Interrupt handler function pointer
 #define SCREENWIDTH  240 // Width of the GBA display
 
 // Pointer to the start of video memory
-extern volatile unsigned short *videoBuffer;
+extern volatile unsigned short* videoBuffer;
 
 // Finds 1D position from 2D coordinates
 #define OFFSET(x, y, width) ((y) * (width) + (x))

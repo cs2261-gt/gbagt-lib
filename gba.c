@@ -1,7 +1,7 @@
 #include "gba.h"
 
 // Pointer to the start of video memory
-unsigned volatile short *videoBuffer = (unsigned short *)0x6000000;
+unsigned volatile short* videoBuffer = (unsigned short*) 0x06000000;
 
 
 // Checks for collision between two rectangles
@@ -16,7 +16,7 @@ void waitForVBlank() {
 }
 
 // Pointer to the start of DMA registers
-DMA *dma = (DMA *)0x40000B0;
+DMA *dma = (DMA*) 0x040000B0;
 
 // Immediately begins a DMA transfer using parameters
 void DMANow(int channel, volatile const void *src, volatile void *dst, unsigned int cnt) {
