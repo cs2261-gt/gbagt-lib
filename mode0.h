@@ -32,13 +32,13 @@
 typedef struct {
 	u16 tileimg[8192];
 } CB;
-#define CHARBLOCK ((CB*) 0x6000000) // Character blocks (tilesets)
+#define CHARBLOCK ((CB*) 0x06000000) // Character blocks (tilesets)
 
 // Screenblocks
 typedef struct {
 	u16 tilemap[1024];
 } SB;
-#define SCREENBLOCK ((SB*) 0x6000000) // Screen blocks (tilemaps)
+#define SCREENBLOCK ((SB*) 0x06000000) // Screen blocks (tilemaps)
 
 // Tilemap Entries
 #define TILEMAP_ENTRY_TILEID(x) (x & 1023)
