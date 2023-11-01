@@ -4,10 +4,10 @@
 #include "gba.h"
 
 // Background registers
-#define REG_BG0CNT (*(volatile unsigned short*) 0x4000008) // Background 0 control register
-#define REG_BG1CNT (*(volatile unsigned short*) 0x400000A) // Background 1 control register
-#define REG_BG2CNT (*(volatile unsigned short*) 0x400000C) // Background 2 control register
-#define REG_BG3CNT (*(volatile unsigned short*) 0x400000E) // Background 3 control register
+#define REG_BG0CNT (*(volatile unsigned short*) 0x04000008) // Background 0 control register
+#define REG_BG1CNT (*(volatile unsigned short*) 0x0400000A) // Background 1 control register
+#define REG_BG2CNT (*(volatile unsigned short*) 0x0400000C) // Background 2 control register
+#define REG_BG3CNT (*(volatile unsigned short*) 0x0400000E) // Background 3 control register
 
 #define REG_BG0HOFF (*(volatile unsigned short*) 0x04000010) // Background 0 horizontal offset register
 #define REG_BG0VOFF (*(volatile unsigned short*) 0x04000012) // Background 0 vertical offset register
@@ -19,8 +19,8 @@
 #define REG_BG3VOFF (*(volatile unsigned short*) 0x0400001E) // Background 3 vertical offset register
 
 // Background bits
-#define BG_CHARBLOCK(n) ((n) << 2)   // Sets which charblock this background should use
-#define BG_SCREENBLOCK(n) ((n) << 8) // Sets which screenblock this background should use
+#define BG_CHARBLOCK(x) ((x) << 2)   // Sets which charblock this background should use
+#define BG_SCREENBLOCK(x) ((x) << 8) // Sets which screenblock this background should use
 #define BG_4BPP (0 << 7) 		     // Sets background to 4bpp mode
 #define BG_8BPP (1 << 7) 			 // Sets background to 8bpp mode
 #define BG_SIZE_SMALL (0 << 14) 	 // Sets background size to 32x32 tiles
