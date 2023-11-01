@@ -3,10 +3,10 @@
 
 #include "gba.h"
 
-#define FRONTBUFFER ((unsigned short *)0x6000000) // Beginning of front buffer
-#define BACKBUFFER  ((unsigned short *)0x600A000) // Beginning of back buffer
+#define FRONTBUFFER ((unsigned short*) 0x06000000) // Beginning of front buffer
+#define BACKBUFFER  ((unsigned short*) 0x0600A000) // Beginning of back buffer
 
-#define REG_BG2CNT (*(volatile unsigned short*)0x400000C) // Background 2 control register
+#define REG_BG2CNT (*(volatile unsigned short*) 0x0400000C) // Background 2 control register
 
 #define SET_MODE4() (REG_DISPCTL = MODE(4) & BG2_ENABLE) // Sets REG_DISPCTL to mode 4
 
