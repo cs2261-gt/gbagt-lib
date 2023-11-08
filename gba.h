@@ -65,8 +65,9 @@ void waitForVBlank();
 
 // Button checks
 extern unsigned short oldButtons; // Keeps track of buttons pressed in previous frame
-#define BUTTON_HELD(key)    (~(REG_BUTTONS) & (key)) // Checks if a button is currently pressed
-#define BUTTON_PRESSED(key) (!(~(oldButtons) & (key)) && (~REG_BUTTONS & (key))) // Checks if a button is currently pressed and wasn't in the previous frame
+extern unsigned short buttons; // Keeps track of buttons pressed in previous frame
+#define BUTTON_HELD(key)    (~(buttons) & (key)) // Checks if a button is currently pressed
+#define BUTTON_PRESSED(key) (!(~(oldButtons) & (key)) && (~(buttons) & (key))) // Checks if a button is currently pressed and wasn't in the previous frame
 
 // DMA
 typedef volatile struct {
@@ -122,6 +123,9 @@ void DMANow(int channel, volatile const void *src, volatile void *dst, unsigned 
 #define REG_IE        (*(unsigned short*) 0x04000200) // Interrupt enable register
 #define REG_IF        (*(volatile unsigned short*) 0x04000202) // Interrupt flag register
 #define REG_INTERRUPT (*(ihp*) 0x03007FFC) // Interrupt handler
+
+#define INTERRUPT_REQUESTED(flag) (REG_IF & (flag)) // Checks if an interrupt has been requested in REG_IF
+#define HALT_UNTIL_INTERRUPTED() __asm__("swi 0x04 << 15") // Puts the system into sleep mode until interrupted
 
 // Interrupt requests
 #define IRQ_VBLANK   (1 << 0) // Enables VBlank interrupts, requires bit 3 in REG_DISPCNT
