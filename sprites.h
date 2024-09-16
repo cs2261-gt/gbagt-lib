@@ -76,6 +76,7 @@ typedef struct {
     int isAnimating;
     int currentFrame;
     int numFrames;
+    int hide;
     u8 oamIndex; 
 } SPRITE;
 

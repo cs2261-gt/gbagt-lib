@@ -65,7 +65,8 @@ void waitForVBlank();
 
 // Button checks
 extern unsigned short oldButtons; // Keeps track of buttons pressed in previous frame
-extern unsigned short buttons; // Keeps track of buttons pressed in previous frame
+extern unsigned short buttons; // Keeps track of buttons pressed in current frame
+
 #define BUTTON_HELD(key)    (~(buttons) & (key)) // Checks if a button is currently pressed
 #define BUTTON_PRESSED(key) (!(~(oldButtons) & (key)) && (~(buttons) & (key))) // Checks if a button is currently pressed and wasn't in the previous frame
 
